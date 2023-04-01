@@ -130,7 +130,8 @@ EMAIL_HOST_PASSWORD = ''
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Santiago'
+#TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
