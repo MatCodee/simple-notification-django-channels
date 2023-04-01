@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Blogs</h1>
+    <button id="connect">Connect to WebSocket</button>
+    <div id="messages"></div>
+    <div id="notifications"></div>
+
+    
+    <div class="row mt-4">
+        {% if posts %}
+            {% for i in posts %}
+                <div class="col-4">
+                    <div class="card">
+                        <img src="{{i.image}}" alt="Imagen de Blog" class="img-fluid">
+                        <div class="px-4 py-4">
+                            <h2>{{i.title}}</h2>
+                            <a href="/{{i.id}}" class="btn btn-primary w-100 d-block">Acceder</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>    
+    
+    <script>
+        var ws_url = 'ws://' + window.location.host + '/ws/notifications/';
+
+        var websocket = new WebSocket(ws_url);
+
+        websocket.onopen = function(event) {
+            console.log('WebSocket connected');
+        };
+        /*
+        websocket.onmessage = function(event) {
+            console.log('WebSocket message received:', event.data);
+            var message = JSON.parse(event.data).message;
+            var messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML += '<p>' + message + '</p>';
+        };
+        */
+        websocket.onmessage = function(event) {
+            console.log('WebSocket message received:', event.data);
+            var data = JSON.parse(event.data);
+            if ('message' in data) {
+                var message = data.message;
+                var messagesDiv = document.getElementById('messages');
+                messagesDiv.innerHTML += '<p>' + message + '</p>';
+            } else if ('notification' in data) {
+                var notification = data.notification;
+                var notificationsDiv = document.getElementById('notifications');
+                notificationsDiv.innerHTML += '<p>' + notification + '</p>';
+            }
+        };
+
+        document.getElementById('connect').addEventListener('click', function() {
+            websocket.send(JSON.stringify({'message': 'Connected to WebSocket'}));
+        });
+    </script>
+{% endblock %}
