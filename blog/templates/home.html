@@ -6,7 +6,6 @@
     <div id="messages"></div>
     <div id="notifications"></div>
 
-    
     <div class="row mt-4">
         {% if posts %}
             {% for i in posts %}
@@ -22,7 +21,6 @@
             {% endfor %}
         {% endif %}
     </div>    
-    
     <script>
         var ws_url = 'ws://' + window.location.host + '/ws/notifications/';
 
@@ -52,7 +50,6 @@
                 notificationsDiv.innerHTML += '<p>' + notification + '</p>';
             }
         };
-
         document.getElementById('connect').addEventListener('click', function() {
             websocket.send(JSON.stringify({'message': 'Connected to WebSocket'}));
         });
